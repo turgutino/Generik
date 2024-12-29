@@ -52,6 +52,7 @@ public class DataBase
             new Debtor("Pamela H. Beauchamp", DateTime.Parse("November 20, 1959"), "801-559-6347", "PamelaHBeauchamp@jourrapide.com", "3239 Tori Lane Salt Lake City, UT 84104", 6588)
         };
 
+    public List<Debtor> Debtors => debtors;
     public DataBase(){}
 
     public DataBase(List<Debtor> debtors)

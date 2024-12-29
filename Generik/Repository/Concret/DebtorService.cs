@@ -16,76 +16,246 @@ public class DebtorService : IDebtorService<Debtor>
 
     public IEnumerable<Debtor> GetDebtorsAbleToFormSmileWord()
     {
-        throw new NotImplementedException();
+        var debtors = _database.Debtors.ToList();
+        var smileLetters = "smile".ToCharArray(); 
+
+        var result = debtors.Where(d =>
+        {
+        
+            var fullName = d.FullName.Replace(" ", "").ToLower();
+
+      
+            return smileLetters.All(letter => fullName.Contains(letter));
+        });
+
+     
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.Debt} AZN");
+        }
+
+        return result;
     }
+
 
     public IEnumerable<Debtor> GetDebtorsAbleToPayOffDebt()
     {
-        throw new NotImplementedException();
+    var debtors = _database.Debtors.ToList();
+    var result = debtors.Where(d =>
+    {
+        
+        var monthlyPayment = 500;
+
+        
+        var monthsRequired = (double)d.Debt / monthlyPayment;
+
+       
+        var monthsUntilBirthday = (d.BirthDay.Month - DateTime.Today.Month + 12) % 12;  
+
+       
+        return monthsRequired <= monthsUntilBirthday;
+    });
+
+   
+    foreach (var debtor in result)
+    {
+        Console.WriteLine($"{debtor.FullName} - {debtor.Debt} AZN - odeye biler");
     }
+
+    return result;
+}
+
+
+
 
     public IEnumerable<Debtor> GetDebtorsAboveAverageDebt(List<Debtor> debtors)
     {
-        throw new NotImplementedException();
+        var averageDebt = debtors.Average(d => d.Debt);
+        var result = debtors.Where(d => d.Debt > averageDebt)
+                            .OrderBy(d => d.FullName.Split(' ').Last())
+                            .ThenBy(d => d.Debt);
+
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.Debt} AZN");
+        }
+
+        return result;
     }
+
 
     public IEnumerable<Debtor> GetDebtorsBornInWinter()
     {
-        throw new NotImplementedException();
+        var debtors = _database.Debtors.ToList();
+        var result = debtors.Where(d => d.BirthDay.Month == 12 || d.BirthDay.Month <= 2);
+
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.BirthDay.ToShortDateString()}");
+        }
+
+        return result;
     }
+
 
     public IEnumerable<Debtor> GetDebtorsByAgeRange(int minAge, int maxAge)
     {
-        throw new NotImplementedException();
+        var list = _database.Debtors.ToList();
+        var result = list.Where(d =>
+        {
+            var today = DateTime.Today;
+            
+            var age = today.Year - d.BirthDay.Year;
+            if (d.BirthDay.Date > today.AddYears(-age))
+            {
+                age--;
+            }
+            return age >= minAge && age <= maxAge;
+        });
+        return result;
     }
 
     public IEnumerable<Debtor> GetDebtorsByDebtAmount(int maxDebt)
     {
-        throw new NotImplementedException();
+        var debtors = _database.Debtors.ToList();
+        var result = debtors.Where(d => d.Debt <= maxDebt);
+
+        
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.Debt} AZN");
+        }
+
+        return result;
     }
 
-    public IEnumerable<Debtor> GetDebtorsByEmailDomain(string domain)
+
+
+    public IEnumerable<Debtor> GetDebtorsByEmailDomain()
     {
-        throw new NotImplementedException();
+        var list = _database.Debtors.ToList();
+        var result = list.Where(d => d.Email.EndsWith("@rhyta.com") || d.Email.EndsWith("@dayrep.com"));
+
+        
+        return result;
     }
 
-    public IEnumerable<Debtor> GetDebtorsByFullNameAndPhone(string fullName, string phonePattern)
+    public IEnumerable<Debtor> GetDebtorsByFullNameAndPhone(int nameLength = 18, int phoneDigit = 7, int requiredCount = 2)
     {
-        throw new NotImplementedException();
+        var debtors = _database.Debtors.ToList();
+
+        
+        var result = debtors.Where(d =>
+            d.FullName.Length > nameLength &&
+            d.Phone.Where(char.IsDigit).Count(c => c == phoneDigit) >= requiredCount
+        );
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.Phone}");
+        }
+
+        return result;
+
+        
+    }
+    public IEnumerable<Debtor> GetDebtorsByPhoneNumberCondition()
+    {
+        var debtors = _database.Debtors.ToList();
+
+       
+        var result = debtors.Where(d => !d.Phone.Contains('8'))
+                            .Select(d => new Debtor
+                            {
+                                FullName = d.FullName,
+                                Debt = d.Debt,
+                                BirthDay = d.BirthDay
+                            });
+
+   
+        foreach (var debtor in result)
+        {
+            var age = DateTime.Today.Year - debtor.BirthDay.Year;
+            if (debtor.BirthDay.Date > DateTime.Today.AddYears(-age)) age--; 
+            Console.WriteLine($"{debtor.FullName.Split(' ').Last()} - {age} years - {debtor.Debt} AZN");
+        }
+
+        return result;
     }
 
-    public IEnumerable<Debtor> GetDebtorsByPhoneNumberCondition(string phonePattern)
-    {
-        throw new NotImplementedException();
-    }
 
     public IEnumerable<Debtor> GetDebtorsFromWW2()
     {
-        throw new NotImplementedException();
+        var debtors = _database.Debtors.ToList();
+        var result = debtors.Where(d => d.BirthDay.Year >= 1900 && d.BirthDay.Year <= 1945);
+
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.BirthDay.ToShortDateString()}");
+        }
+
+        return result;
     }
+
 
     public IEnumerable<Debtor> GetDebtorsWithTripleLettersInName()
     {
-        throw new NotImplementedException();
+        var debtors = _database.Debtors.ToList();
+        var result = debtors.Where(d => d.FullName.GroupBy(c => c).Any(g => g.Count() >= 3))
+                            .OrderBy(d => d.FullName);
+
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.Debt} AZN");
+        }
+
+        return result;
     }
 
     public IEnumerable<Debtor> GetDebtorsWithUniquePhoneNumber()
     {
-        throw new NotImplementedException();
+        var debtors = _database.Debtors.ToList();
+        var result = debtors.Where(d => d.Phone.Distinct().Count() == d.Phone.Length);
+
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.Phone} - {debtor.Debt} AZN");
+        }
+
+        return result;
     }
+
 
     public int GetMostCommonBirthYear(IEnumerable<Debtor> debtors)
     {
-        throw new NotImplementedException();
+        var mostCommonYear = debtors.GroupBy(d => d.BirthDay.Year)
+                                    .OrderByDescending(g => g.Count())
+                                    .First().Key;
+
+        Console.WriteLine($"Most common birth year: {mostCommonYear}");
+        return mostCommonYear;
     }
+
 
     public IEnumerable<Debtor> GetTop5HighestDebtDebtors(IEnumerable<Debtor> debtors)
     {
-        throw new NotImplementedException();
+        var result = debtors.OrderByDescending(d => d.Debt).Take(5);
+
+        foreach (var debtor in result)
+        {
+            Console.WriteLine($"{debtor.FullName} - {debtor.Debt} AZN");
+        }
+
+        return result;
     }
+
 
     public int GetTotalDebt(IEnumerable<Debtor> debtors)
     {
-        throw new NotImplementedException();
+        var totalDebt = debtors.Sum(d => d.Debt);
+
+        Console.WriteLine($"Butun borclar : {totalDebt} AZN");
+        return totalDebt;
     }
+
+
 }

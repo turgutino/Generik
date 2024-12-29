@@ -3,6 +3,7 @@ using Generik.Repository.DbContect;
 using Generik.UnitOfWork.Concret;
 using Generik.UnitOfWork.Abstract;
 using Generik.Repository.Concret;
+using Generik.Repository.Abstract;
 
 namespace Generik
 {
@@ -15,12 +16,55 @@ namespace Generik
             
             Unit unit = new Unit(db);
 
-            var man = unit.DebtorService.GetDebtorsAbleToFormSmileWord();
-            var man2 = unit.DebtorService.GetDebtorsByAgeRange(3,4);
-            var man3 = unit.DebtorService.GetDebtorsWithTripleLettersInName();
+            //1)
+            //var smileDebtors = unit.DebtorService.GetDebtorsByEmailDomain();
+            //Console.WriteLine("Rhyta.com və ya Dayrep.com Email Borclular:");
+            //foreach (var debtor in smileDebtors)
+            //{
+            //    Console.WriteLine($"{debtor.FullName} - {debtor.Email}");
+            //}
 
-            //Buradan butun funksiyalara catmaq olur
+            //2)
+            //var debtorsInAgeRange = unit.DebtorService.GetDebtorsByAgeRange(26, 36);
 
+            //foreach (var debtor in debtorsInAgeRange)
+            //{
+            //    Console.WriteLine($"{debtor.FullName} - {debtor.BirthDay.ToShortDateString()} ({DateTime.Today.Year - debtor.BirthDay.Year} yaş)");
+            //}
+
+            //3)
+            //unit.DebtorService.GetDebtorsByDebtAmount(5000);
+
+            //unit.DebtorService.GetDebtorsByFullNameAndPhone();
+            //unit.DebtorService.GetDebtorsBornInWinter();
+
+
+
+
+            //unit.DebtorService.GetDebtorsAboveAverageDebt(db.Debtors);
+
+            //unit.DebtorService.GetDebtorsByPhoneNumberCondition();
+
+            //unit.DebtorService.GetDebtorsWithTripleLettersInName();
+
+            //unit.DebtorService.GetDebtorsWithTripleLettersInName();
+
+            //unit.DebtorService.GetMostCommonBirthYear(db.Debtors);
+
+            //unit.DebtorService.GetTop5HighestDebtDebtors(db.Debtors);
+
+            //unit.DebtorService.GetTotalDebt(db.Debtors);
+
+            //unit.DebtorService.GetDebtorsFromWW2();
+
+            //unit.DebtorService.GetDebtorsWithUniquePhoneNumber();
+
+            //unit.DebtorService.GetDebtorsAbleToPayOffDebt();
+
+            //unit.DebtorService.GetDebtorsAbleToFormSmileWord();
+
+
+            
 
         }
     }
